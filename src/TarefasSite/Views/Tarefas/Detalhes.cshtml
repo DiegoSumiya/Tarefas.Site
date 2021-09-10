@@ -1,0 +1,41 @@
+﻿@model TarefasSite.ViewModels.TarefaViewModel
+@{
+    ViewData["Title"] = "Detalhes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detalhes</h1>
+<div class="card p-3">
+    <div class="card-body mb-3">
+        Detalhes da Tarefa?
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Id, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Id, new { @class = "form-control", @readonly = true })
+    </div>
+
+    <div class="mb-3">
+        @Html.Label("IdCategoria", "Categoria", new { @class = "form-label" })
+        @Html.DropDownListFor(m => m.IdCategoria, Model.Categorias, "Selecione", new { @class = "form-select", disabled = true })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Data, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Data, new { @class = "form-control", @readonly = true })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Descricao, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Descricao, new { @class = "form-control", @readonly = true })
+    </div>
+
+    <div class="mb-3">
+        @Html.CheckBoxFor(m => m.Notificacao, new { @class = "form-check-input", disabled = true })
+        @Html.LabelFor(m => m.Notificacao, new { @class = "form-check-label" })
+    </div>
+
+    <div>
+        @Html.ActionLink("Voltar", "Index", "Tarefas", null, new { @class = "btn btn-secondary" })
+    </div>
+
+</div>

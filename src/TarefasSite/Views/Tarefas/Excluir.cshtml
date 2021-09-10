@@ -1,0 +1,42 @@
+﻿@model TarefasSite.ViewModels.TarefaViewModel
+@{
+    ViewData["Title"] = "Excluir";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card p-3">
+    <div class="card-body mb-3">
+        Deseja Excluir a Tarefa?
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Id, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Id, new { @class = "form-control", @readonly = true })
+    </div>
+
+    <div class="mb-3">
+        @Html.Label("IdCategoria", "Categoria", new { @class = "form-label" })
+        @Html.DropDownListFor(m => m.IdCategoria, Model.Categorias, "Selecione", new { @class = "form-select", disabled = true })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Data, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Data, new { @class = "form-control", @readonly = true })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Descricao, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Descricao, new { @class = "form-control", @readonly = true })
+    </div>
+
+    <div class="mb-3">
+        @Html.CheckBoxFor(m => m.Notificacao, new { @class = "form-check-input", disabled = true })
+        @Html.LabelFor(m => m.Notificacao, new { @class = "form-check-label" })
+    </div>
+
+    <div>
+        @Html.ActionLink("Sim", "Deletar", "Tarefas", new { id = Model.Id }, new { @class = "btn btn-danger" })
+        @Html.ActionLink("Cancelar", "Index", "Tarefas", null, new { @class = "btn btn-secondary" })
+    </div>
+
+</div>
+

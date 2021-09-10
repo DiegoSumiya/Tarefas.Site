@@ -1,0 +1,59 @@
+﻿@model List<TarefasSite.ViewModels.ListaTarefasViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card p-3">
+    <div class="card-body mb-3">
+        Lista de Tarefas
+    </div>
+    <div>
+        <a href="/Tarefas/Nova" class="btn btn-outline-primary"> Nova Tarefa </a>
+    </div>
+
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Data da Tarefa</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Descricao</th>
+                <th scope="col">Me notificar?</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Data.ToString("dd MMMM, yyyy - HH:mm")</td>
+                <td>@item.Categoria</td>
+                <td>@item.Descricao</td>
+                <td>
+                    @if (item.Notificacao)
+                    {
+                        @Html.Raw("Sim")
+                    }
+                    else
+                    {
+                        @Html.Raw("Não")
+                    }
+                </td>
+                <td><a class="btn btn-outline-primary" href="/Tarefas/Detalhes/@item.Id">Detalhes</a></td>
+                <td><a class="btn btn-outline-primary" href="/Tarefas/Editar/@item.Id">Editar</a></td>
+                <td><a class="btn btn-outline-danger" href="/Tarefas/Excluir/@item.Id">Excluir</a></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
