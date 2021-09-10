@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TarefasSite.Models
+namespace Tarefas.Dominio.Models
 {
     public class Tarefa
     {

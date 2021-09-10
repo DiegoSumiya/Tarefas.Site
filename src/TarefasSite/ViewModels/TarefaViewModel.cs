@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using TarefasSite.Models;
+using Tarefas.Dominio.Models;
 
 namespace TarefasSite.ViewModels
 {

@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using TarefasSite.Models;
-using TarefasSite.Repositorio;
+using Tarefas.Dominio.Models;
+using Tarefas.Infra.Repositorio;
 using TarefasSite.ViewModels;
 
 namespace TarefasSite.Controllers

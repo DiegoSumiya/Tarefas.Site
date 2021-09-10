@@ -1,10 +1,10 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using TarefasSite.Models;
+using System.Data.SqlClient;
+using Tarefas.Dominio.Models;
 
-namespace TarefasSite.Repositorio
+namespace Tarefas.Infra.Repositorio
 {
     public class TarefaRepositorio
     {
@@ -31,8 +31,8 @@ namespace TarefasSite.Repositorio
                       ,[DATA]
                       ,[DESCRICAO]
                       ,[NOTIFICACAO]
-                      ,[ID_CATEGORIA]
-                  FROM[dbo].[TB_TAREFAS]", connection);
+                      ,[IDCATEGORIA]
+                  FROM[dbo].[TAREFA]", connection);
 
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -45,7 +45,7 @@ namespace TarefasSite.Repositorio
                     DateTime data = Convert.ToDateTime(reader["DATA"]);
                     string descricao = reader["DESCRICAO"].ToString();
                     bool notificacao = Convert.ToBoolean(reader["NOTIFICACAO"]);
-                    int idCategoria = Convert.ToInt32(reader["ID_CATEGORIA"]);
+                    int idCategoria = Convert.ToInt32(reader["IDCATEGORIA"]);
 
                     Tarefa item = new Tarefa(id, data, descricao, notificacao, idCategoria);
 
@@ -74,8 +74,8 @@ namespace TarefasSite.Repositorio
                       ,[DATA]
                       ,[DESCRICAO]
                       ,[NOTIFICACAO]
-                      ,[ID_CATEGORIA]
-                  FROM[dbo].[TB_TAREFAS]
+                      ,[IDCATEGORIA]
+                  FROM[dbo].[TAREFA]
                   WHERE ID = @id";
 
                 command.Parameters.AddWithValue("id", id);
@@ -89,7 +89,7 @@ namespace TarefasSite.Repositorio
                     DateTime data = Convert.ToDateTime(reader["DATA"]);
                     string descricao = reader["DESCRICAO"].ToString();
                     bool notificacao = Convert.ToBoolean(reader["NOTIFICACAO"]);
-                    int idCategoria = Convert.ToInt32(reader["ID_CATEGORIA"]);
+                    int idCategoria = Convert.ToInt32(reader["IDCATEGORIA"]);
 
                     tarefa = new Tarefa(id, data, descricao, notificacao, idCategoria);
                 }
@@ -109,22 +109,22 @@ namespace TarefasSite.Repositorio
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
                 command.CommandText =
-                    @"INSERT INTO [dbo].[TB_TAREFAS]
+                    @"INSERT INTO [dbo].[TAREFA]
                             ([DATA]
                             ,[DESCRICAO]
                             ,[NOTIFICACAO]
-                            ,[ID_CATEGORIA])
+                            ,[IDCATEGORIA])
                         VALUES
                             (@DATA
                             , @DESCRICAO
                             , @NOTIFICACAO
-                            , @ID_CATEGORIA)";
+                            , @IDCATEGORIA)";
 
                 command.Parameters.AddWithValue("DATA", tarefa.Data);
                 command.Parameters.Add("DESCRICAO", System.Data.SqlDbType.VarChar);
                 command.Parameters["DESCRICAO"].Value = tarefa.Descricao;
                 command.Parameters.Add(new SqlParameter("NOTIFICACAO", tarefa.Notificacao));
-                command.Parameters.Add(new SqlParameter("ID_CATEGORIA", tarefa.IdCategoria));
+                command.Parameters.Add(new SqlParameter("IDCATEGORIA", tarefa.IdCategoria));
 
                 //Abrir conexao
                 connection.Open();
@@ -144,11 +144,11 @@ namespace TarefasSite.Repositorio
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
                 command.CommandText =
-                    @"UPDATE [dbo].[TB_TAREFAS]
+                    @"UPDATE [dbo].[TAREFA]
                        SET [DATA] = @DATA
                           ,[DESCRICAO] = @DESCRICAO
                           ,[NOTIFICACAO] = @NOTIFICACAO
-                          ,[ID_CATEGORIA] = @ID_CATEGORIA
+                          ,[IDCATEGORIA] = @IDCATEGORIA
                      WHERE ID = @ID";
 
                 command.Parameters.AddWithValue("DATA", tarefa.Data);
@@ -160,7 +160,7 @@ namespace TarefasSite.Repositorio
 
                 command.Parameters.AddWithValue("ID", tarefa.Id);
 
-                command.Parameters.Add(new SqlParameter("ID_CATEGORIA", tarefa.IdCategoria));
+                command.Parameters.Add(new SqlParameter("IDCATEGORIA", tarefa.IdCategoria));
 
                 //Abrir conexao
                 connection.Open();
@@ -179,7 +179,7 @@ namespace TarefasSite.Repositorio
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
                 command.CommandText =
-                    @"DELETE FROM TB_TAREFAS WHERE ID = @ID";
+                    @"DELETE FROM TAREFA WHERE ID = @ID";
 
                 command.Parameters.AddWithValue("ID", id);
 

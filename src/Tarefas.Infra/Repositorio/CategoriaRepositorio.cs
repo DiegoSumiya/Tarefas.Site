@@ -1,10 +1,10 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using TarefasSite.Models;
+using System.Data.SqlClient;
+using Tarefas.Dominio.Models;
 
-namespace TarefasSite.Repositorio
+namespace Tarefas.Infra.Repositorio
 {
     public class CategoriaRepositorio
     {
@@ -24,7 +24,7 @@ namespace TarefasSite.Repositorio
             {
                 //2- Criar um comando para executar no banco de dados
                 SqlCommand command = new SqlCommand();
-                command.CommandText = "SELECT [ID],[DESCRICAO] FROM [dbo].[TB_CATEGORIAS]";
+                command.CommandText = "SELECT [ID],[DESCRICAO] FROM [dbo].[CATEGORIA]";
                 command.Connection = connection;
 
                 //2.1 Abrir conexao

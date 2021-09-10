@@ -14,4 +14,9 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Tarefas.Dominio\Tarefas.Dominio.csproj" />
+    <ProjectReference Include="..\Tarefas.Infra\Tarefas.Infra.csproj" />
+  </ItemGroup>
+
 </Project>

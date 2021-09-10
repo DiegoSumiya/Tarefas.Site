@@ -1,5 +1,5 @@
 ﻿
-namespace TarefasSite.Models
+namespace Tarefas.Dominio.Models
 {
     //public enum Categoria : byte
     //{
