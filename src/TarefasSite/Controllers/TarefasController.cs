@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using Tarefas.Dominio.Models;
@@ -11,24 +10,23 @@ namespace TarefasSite.Controllers
 {
     public class TarefasController : Controller
     {
-        private readonly IConfiguration _configuration;
+        private readonly ICategoriaRepositorio _categoriaRepositorio;
+        private readonly ITarefaRepositorio _tarefaRepositorio;
 
-        public TarefasController(IConfiguration configuration)
+        public TarefasController(ICategoriaRepositorio categoriaRepositorio, ITarefaRepositorio tarefaRepositorio)
         {
-            _configuration = configuration;         
+            _categoriaRepositorio = categoriaRepositorio;
+            _tarefaRepositorio = tarefaRepositorio;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            TarefaRepositorio repositorio = new TarefaRepositorio(_configuration);
-
             //buscar os registros da tabela de tarefas no repositorio
-            List<Tarefa> tarefas = repositorio.Buscar();
+            List<Tarefa> tarefas = _tarefaRepositorio.Buscar();
 
             //Lista de Categorias
-            CategoriaRepositorio categoriaRepositorio = new CategoriaRepositorio(_configuration);
-            List<Categoria> categorias = categoriaRepositorio.Buscar();
+            List<Categoria> categorias = _categoriaRepositorio.Buscar();
 
             List<ListaTarefasViewModel> tarefasViewModels = new List<ListaTarefasViewModel>();
 
@@ -77,13 +75,11 @@ namespace TarefasSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                TarefaRepositorio repositorio = new TarefaRepositorio(_configuration);
-
                 DateTime dataHora = new DateTime(tarefaViewModel.Data.Year, tarefaViewModel.Data.Month, tarefaViewModel.Data.Day, tarefaViewModel.Hora.Hour, tarefaViewModel.Hora.Minute, 0);
 
                 Tarefa tarefa = new Tarefa(dataHora, tarefaViewModel.Descricao, tarefaViewModel.Notificacao, tarefaViewModel.IdCategoria.Value);
 
-                repositorio.Inserir(tarefa);
+                _tarefaRepositorio.Inserir(tarefa);
 
                 return RedirectToAction("Inserir");
             }
@@ -112,13 +108,11 @@ namespace TarefasSite.Controllers
         [HttpPost]
         public IActionResult Editar(TarefaViewModel tarefaViewModel)
         {
-            TarefaRepositorio repositorio = new TarefaRepositorio(_configuration);
-
             DateTime dataHora = new DateTime(tarefaViewModel.Data.Year, tarefaViewModel.Data.Month, tarefaViewModel.Data.Day, tarefaViewModel.Hora.Hour, tarefaViewModel.Hora.Minute, 0);
 
             Tarefa tarefa = new Tarefa(tarefaViewModel.Id, dataHora, tarefaViewModel.Descricao, tarefaViewModel.Notificacao, tarefaViewModel.IdCategoria.Value);
 
-            repositorio.Atualizar(tarefa);
+            _tarefaRepositorio.Atualizar(tarefa);
 
             return RedirectToAction("Index");
         }
@@ -126,9 +120,7 @@ namespace TarefasSite.Controllers
         [HttpGet]
         public IActionResult Deletar(int id)
         {
-            TarefaRepositorio repositorio = new TarefaRepositorio(_configuration);
-
-            repositorio.Excluir(id);
+            _tarefaRepositorio.Excluir(id);
 
             return RedirectToAction("Index");
         }
@@ -141,9 +133,8 @@ namespace TarefasSite.Controllers
         private IActionResult BuscarTarefa(int id)
         {
             //buscar tarefa no repositorio
-            TarefaRepositorio repositorio = new TarefaRepositorio(_configuration);
-
-            Tarefa tarefa = repositorio.Buscar(id);
+            
+            Tarefa tarefa = _tarefaRepositorio.Buscar(id);
 
             TarefaViewModel tarefaViewModel = new TarefaViewModel();
 
@@ -162,8 +153,7 @@ namespace TarefasSite.Controllers
 
         private List<SelectListItem> BuscarCategorias()
         {
-            CategoriaRepositorio categoriaRepositorio = new CategoriaRepositorio(_configuration);
-            List<Categoria> categorias = categoriaRepositorio.Buscar();
+            List<Categoria> categorias = _categoriaRepositorio.Buscar();
 
             List<SelectListItem> listItems = new List<SelectListItem>();
 

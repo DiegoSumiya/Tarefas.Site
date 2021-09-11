@@ -6,7 +6,7 @@ using Tarefas.Dominio.Models;
 
 namespace Tarefas.Infra.Repositorio
 {
-    public class TarefaRepositorio
+    public class TarefaRepositorio : ITarefaRepositorio
     {
         private readonly IConfiguration _configuration;
         private readonly string _connectionString;

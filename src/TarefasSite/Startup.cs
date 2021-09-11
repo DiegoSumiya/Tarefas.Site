@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tarefas.Infra.Repositorio;
 
 namespace TarefasSite
 {
@@ -17,6 +18,9 @@ namespace TarefasSite
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
+            services.AddScoped<ITarefaRepositorio, TarefaRepositorio>();
 
             //Remover quando subir pra produção
             services.AddRazorPages().AddRazorRuntimeCompilation();
