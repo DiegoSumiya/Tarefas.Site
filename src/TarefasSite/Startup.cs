@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tarefas.Dominio.Repositorio;
 using Tarefas.Infra.Repositorio;
 
 namespace TarefasSite
@@ -19,8 +21,16 @@ namespace TarefasSite
         {
             services.AddMvc();
 
+            services
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(option =>
+                {
+                    option.LoginPath = "/User/Login";
+                });
+
             services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
             services.AddScoped<ITarefaRepositorio, TarefaRepositorio>();
+            services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 
             //Remover quando subir pra produção
             services.AddRazorPages().AddRazorRuntimeCompilation();
@@ -37,6 +47,8 @@ namespace TarefasSite
             app.UseRouting();
 
             app.UseStaticFiles();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

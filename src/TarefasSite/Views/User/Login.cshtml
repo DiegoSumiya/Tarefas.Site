@@ -1,0 +1,40 @@
+﻿@model TarefasSite.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Acessar Conta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card p-3 w-25 align-content-center">
+
+    @using (Html.BeginForm(FormMethod.Post))
+    {
+
+
+        @if (ViewBag.ExisteErro == true)
+        {
+            <div class="alert-danger p-3">
+                @Html.ValidationSummary(false, "Os seguintes erros foram encontrados: ", new { @class = "text-danger" })
+            </div>
+        }
+
+
+        <div class="card-body mb-3">
+            Entrar
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Senha, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Senha, new { @class = "form-control" , type = "password"})
+        </div>
+        
+        <div>
+            <button class="btn btn-primary" type="submit">Entrar</button>
+            @Html.ActionLink("Criar Conta", "Nova", "User", null, new { @class = "btn btn-secondary" })
+        </div>
+    }
+</div>
+
