@@ -23,7 +23,7 @@ namespace TarefasSite
 
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(option =>
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, option =>
                 {
                     option.LoginPath = "/User/Login";
                 });
@@ -48,6 +48,8 @@ namespace TarefasSite
 
             app.UseStaticFiles();
 
+            app.UseAuthentication();
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

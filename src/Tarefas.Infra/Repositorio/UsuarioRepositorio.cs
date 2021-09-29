@@ -64,17 +64,17 @@ namespace Tarefas.Infra.Repositorio
                 command.Connection = connection;
                 command.CommandText =
                     @"INSERT INTO [dbo].[Usuario]
-                            ([NOME]
-                            ,[EMAIL]
+                            ([EMAIL]
+                            ,[NOME]
                             ,[SENHA])
                            VALUES
-                            (@NOME
-                            , @EMAIL
+                            (@EMAIL
+                            , @NOME
                             , @SENHA)";
 
+                command.Parameters.AddWithValue("EMAIL", usuario.Email);
                 command.Parameters.AddWithValue("NOME", usuario.Nome);
-                command.Parameters.AddWithValue("EMAIL", usuario.Senha);
-                command.Parameters.AddWithValue("SENHA", usuario.Email);
+                command.Parameters.AddWithValue("SENHA", usuario.Senha);
 
                 //Abrir conexao
                 connection.Open();

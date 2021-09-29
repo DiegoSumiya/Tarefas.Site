@@ -32,6 +32,7 @@ namespace Tarefas.Infra.Repositorio
                       ,[DESCRICAO]
                       ,[NOTIFICACAO]
                       ,[IDCATEGORIA]
+                      ,[IDUSUARIO]
                   FROM[dbo].[TAREFA]", connection);
 
                 connection.Open();
@@ -46,8 +47,9 @@ namespace Tarefas.Infra.Repositorio
                     string descricao = reader["DESCRICAO"].ToString();
                     bool notificacao = Convert.ToBoolean(reader["NOTIFICACAO"]);
                     int idCategoria = Convert.ToInt32(reader["IDCATEGORIA"]);
+                    string idUsuario = reader["IDUSUARIO"].ToString();
 
-                    Tarefa item = new Tarefa(id, data, descricao, notificacao, idCategoria);
+                    Tarefa item = new Tarefa(id, data, descricao, notificacao, idCategoria, idUsuario);
 
                     tarefas.Add(item);
                 }
@@ -90,8 +92,9 @@ namespace Tarefas.Infra.Repositorio
                     string descricao = reader["DESCRICAO"].ToString();
                     bool notificacao = Convert.ToBoolean(reader["NOTIFICACAO"]);
                     int idCategoria = Convert.ToInt32(reader["IDCATEGORIA"]);
+                    string idUsuario = reader["IDUSUARIO"].ToString();
 
-                    tarefa = new Tarefa(id, data, descricao, notificacao, idCategoria);
+                    tarefa = new Tarefa(id, data, descricao, notificacao, idCategoria, idUsuario);
                 }
 
                 connection.Close();
@@ -113,18 +116,21 @@ namespace Tarefas.Infra.Repositorio
                             ([DATA]
                             ,[DESCRICAO]
                             ,[NOTIFICACAO]
-                            ,[IDCATEGORIA])
+                            ,[IDCATEGORIA]
+                            ,[IDUSUARIO])
                         VALUES
                             (@DATA
                             , @DESCRICAO
                             , @NOTIFICACAO
-                            , @IDCATEGORIA)";
+                            , @IDCATEGORIA
+                            ,@IDUSUARIO)";
 
                 command.Parameters.AddWithValue("DATA", tarefa.Data);
                 command.Parameters.Add("DESCRICAO", System.Data.SqlDbType.VarChar);
                 command.Parameters["DESCRICAO"].Value = tarefa.Descricao;
                 command.Parameters.Add(new SqlParameter("NOTIFICACAO", tarefa.Notificacao));
                 command.Parameters.Add(new SqlParameter("IDCATEGORIA", tarefa.IdCategoria));
+                command.Parameters.Add(new SqlParameter("IDUSUARIO", tarefa.IdUsuario));
 
                 //Abrir conexao
                 connection.Open();

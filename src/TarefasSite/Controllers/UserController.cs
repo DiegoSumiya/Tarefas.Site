@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Tarefas.Dominio.Models;
 using Tarefas.Dominio.Repositorio;
@@ -27,9 +30,10 @@ namespace TarefasSite.Controllers
         {
             return View();
         }
-      
+       
+       
         [HttpPost]
-        public IActionResult Login(LoginViewModel loginViewModel)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             if(this.ModelState.IsValid)
             {
@@ -40,8 +44,36 @@ namespace TarefasSite.Controllers
                     //erro >> usuario nao encontrado
                     ViewBag.ExisteErro = true;
                     this.ModelState.AddModelError("usuario_senha_invalido", "Usuário ou senha inválidos");
+                    return View(loginViewModel);
                 }
-                
+
+
+                // Criar Sessão para o usario
+                // Redirecionar para tela de tarefas
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, usuario.Email),
+                    new Claim(ClaimTypes.Sid, usuario.Email),
+                    new Claim("FullName", usuario.Nome),
+                    new Claim(ClaimTypes.Role, "Usuario"),
+                };
+
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = new AuthenticationProperties
+                {
+                   
+                    ExpiresUtc = DateTimeOffset.Now.AddMinutes(10),
+                    IssuedUtc = DateTime.Now,
+                };
+
+                await HttpContext.SignInAsync(
+                   CookieAuthenticationDefaults.AuthenticationScheme,
+                   new ClaimsPrincipal(claimsIdentity),
+                   authProperties);
+
+                return RedirectToAction("Index", "Tarefas");
             }
             else
             {
