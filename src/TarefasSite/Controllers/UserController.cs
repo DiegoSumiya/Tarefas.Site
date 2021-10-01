@@ -52,8 +52,7 @@ namespace TarefasSite.Controllers
                 // Redirecionar para tela de tarefas
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, usuario.Email),
-                    new Claim(ClaimTypes.Sid, usuario.Email),
+                    new Claim(ClaimTypes.Email, usuario.Email),
                     new Claim("FullName", usuario.Nome),
                     new Claim(ClaimTypes.Role, "Usuario"),
                 };

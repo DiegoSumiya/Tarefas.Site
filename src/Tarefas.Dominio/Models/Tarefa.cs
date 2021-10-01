@@ -4,25 +4,27 @@ namespace Tarefas.Dominio.Models
 {
     public class Tarefa
     {
-        public Tarefa(DateTime data, string descricao, bool notificacao, int idCategoria, string idUsuario)
+        public Tarefa(DateTime data, string descricao, bool notificacao, int idCategoria, string emailUsuario)
         {
             Data = data;
             Descricao = descricao;
             Notificacao = notificacao;
             IdCategoria = idCategoria;
-            IdUsuario = idUsuario;
+            EmailUsuario = emailUsuario;
         }
 
-        public Tarefa(int id, DateTime data, string descricao, bool notificacao, int idCategoria, string idUsuario)
+        public Tarefa(int id, DateTime data, string descricao, bool notificacao, int idCategoria, string emailUsuario)
         {
             Id = id;
             Data = data;
             Descricao = descricao;
             Notificacao = notificacao;
             IdCategoria = idCategoria;
-            IdUsuario = idUsuario;
+            EmailUsuario = emailUsuario;
 
         }
+
+        
 
         public int Id { get; set; }
 
@@ -33,7 +35,7 @@ namespace Tarefas.Dominio.Models
         public bool Notificacao { get; set; }
 
         public int IdCategoria { get; set; }
-        public string IdUsuario { get; set; }
+        public string EmailUsuario { get; set; }
 
     }
 }

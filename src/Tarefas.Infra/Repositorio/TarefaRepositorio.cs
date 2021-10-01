@@ -17,7 +17,7 @@ namespace Tarefas.Infra.Repositorio
             _connectionString = _configuration.GetConnectionString("TarefasDB");
         }
 
-        public List<Tarefa> Buscar()
+        public List<Tarefa> Buscar(string email)
         {
             //buscar os registros da tabela de tarefas
             //1 Conectar no banco
@@ -26,14 +26,18 @@ namespace Tarefas.Infra.Repositorio
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 //2 EXECUTAR COMANDO (SELECT)
-                SqlCommand command = new SqlCommand(
-                @"SELECT [ID]
+                SqlCommand command = new SqlCommand();
+                command.Connection = connection;
+                command.CommandText = @"SELECT [ID]
                       ,[DATA]
                       ,[DESCRICAO]
                       ,[NOTIFICACAO]
                       ,[IDCATEGORIA]
-                      ,[IDUSUARIO]
-                  FROM[dbo].[TAREFA]", connection);
+                      ,[EMAIL_USUARIO]
+                  FROM[dbo].[TAREFA]
+                  WHERE EMAIL_USUARIO = @email";
+
+                command.Parameters.AddWithValue("email", email);
 
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -47,13 +51,13 @@ namespace Tarefas.Infra.Repositorio
                     string descricao = reader["DESCRICAO"].ToString();
                     bool notificacao = Convert.ToBoolean(reader["NOTIFICACAO"]);
                     int idCategoria = Convert.ToInt32(reader["IDCATEGORIA"]);
-                    string idUsuario = reader["IDUSUARIO"].ToString();
+                    string emailUsuario = reader["EMAIL_USUARIO"].ToString();
 
-                    Tarefa item = new Tarefa(id, data, descricao, notificacao, idCategoria, idUsuario);
+                    Tarefa item = new Tarefa(id, data, descricao, notificacao, idCategoria, emailUsuario);
 
                     tarefas.Add(item);
                 }
-
+                
                 connection.Close();
             }
 
@@ -61,7 +65,7 @@ namespace Tarefas.Infra.Repositorio
 
         }
 
-        public Tarefa Buscar(int id)
+        public Tarefa Buscar(int id, string email)
         {
             //buscar os registros da tabela de tarefas
             //1 Conectar no banco
@@ -77,10 +81,12 @@ namespace Tarefas.Infra.Repositorio
                       ,[DESCRICAO]
                       ,[NOTIFICACAO]
                       ,[IDCATEGORIA]
+                      ,[EMAIL_USUARIO]
                   FROM[dbo].[TAREFA]
-                  WHERE ID = @id";
+                  WHERE ID = @id AND EMAIL_USUARIO = @email";
 
                 command.Parameters.AddWithValue("id", id);
+                command.Parameters.AddWithValue("email", email);
 
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
@@ -92,9 +98,9 @@ namespace Tarefas.Infra.Repositorio
                     string descricao = reader["DESCRICAO"].ToString();
                     bool notificacao = Convert.ToBoolean(reader["NOTIFICACAO"]);
                     int idCategoria = Convert.ToInt32(reader["IDCATEGORIA"]);
-                    string idUsuario = reader["IDUSUARIO"].ToString();
+                    string emailUsuario = reader["EMAIL_USUARIO"].ToString();
 
-                    tarefa = new Tarefa(id, data, descricao, notificacao, idCategoria, idUsuario);
+                    tarefa = new Tarefa(id, data, descricao, notificacao, idCategoria, emailUsuario);
                 }
 
                 connection.Close();
@@ -117,20 +123,20 @@ namespace Tarefas.Infra.Repositorio
                             ,[DESCRICAO]
                             ,[NOTIFICACAO]
                             ,[IDCATEGORIA]
-                            ,[IDUSUARIO])
+                            ,[EMAIL_USUARIO])
                         VALUES
                             (@DATA
                             , @DESCRICAO
                             , @NOTIFICACAO
                             , @IDCATEGORIA
-                            ,@IDUSUARIO)";
+                            ,@EMAIL_USUARIO)";
 
                 command.Parameters.AddWithValue("DATA", tarefa.Data);
                 command.Parameters.Add("DESCRICAO", System.Data.SqlDbType.VarChar);
                 command.Parameters["DESCRICAO"].Value = tarefa.Descricao;
                 command.Parameters.Add(new SqlParameter("NOTIFICACAO", tarefa.Notificacao));
                 command.Parameters.Add(new SqlParameter("IDCATEGORIA", tarefa.IdCategoria));
-                command.Parameters.Add(new SqlParameter("IDUSUARIO", tarefa.IdUsuario));
+                command.Parameters.Add(new SqlParameter("EMAIL_USUARIO", tarefa.EmailUsuario));
 
                 //Abrir conexao
                 connection.Open();
@@ -141,7 +147,7 @@ namespace Tarefas.Infra.Repositorio
 
         }
 
-        public void Atualizar(Tarefa tarefa)
+        public void Atualizar(Tarefa tarefa, string email)
         {
             //Criar conexao com banco
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -155,9 +161,11 @@ namespace Tarefas.Infra.Repositorio
                           ,[DESCRICAO] = @DESCRICAO
                           ,[NOTIFICACAO] = @NOTIFICACAO
                           ,[IDCATEGORIA] = @IDCATEGORIA
-                     WHERE ID = @ID";
+                     WHERE ID = @ID AND EMAIL_USUARIO = @email";
 
                 command.Parameters.AddWithValue("DATA", tarefa.Data);
+                command.Parameters.AddWithValue("email", email);
+
 
                 command.Parameters.Add("DESCRICAO", System.Data.SqlDbType.VarChar);
                 command.Parameters["DESCRICAO"].Value = tarefa.Descricao;
@@ -176,7 +184,7 @@ namespace Tarefas.Infra.Repositorio
             }
         }
 
-        public void Excluir(int id)
+        public void Excluir(int id, string email)
         {
             //Criar conexao com banco
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -185,9 +193,11 @@ namespace Tarefas.Infra.Repositorio
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
                 command.CommandText =
-                    @"DELETE FROM TAREFA WHERE ID = @ID";
+                    @"DELETE FROM TAREFA
+                        WHERE ID = @ID AND EMAIL_USUARIO = @email";
 
                 command.Parameters.AddWithValue("ID", id);
+                command.Parameters.AddWithValue("email", email);
 
                 //Abrir conexao
                 connection.Open();
