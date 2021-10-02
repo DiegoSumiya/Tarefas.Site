@@ -153,6 +153,15 @@ namespace TarefasSite.Controllers
             Tarefa tarefa = _tarefaRepositorio.Buscar(id, email.Value);
 
             TarefaViewModel tarefaViewModel = new TarefaViewModel();
+            tarefaViewModel.Categorias = BuscarCategorias();
+
+            if (tarefa == null)
+            {
+                //erro >> tarefa nao encontrada
+                ViewBag.ExisteErro = true;
+                this.ModelState.AddModelError("Tarefa_Nao_Encontrada", "Tarefa não encontrada");
+                return View(tarefaViewModel);
+            }
 
             tarefaViewModel.Id = tarefa.Id;
             tarefaViewModel.Descricao = tarefa.Descricao;

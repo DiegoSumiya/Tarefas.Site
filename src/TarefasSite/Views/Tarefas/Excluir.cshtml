@@ -8,6 +8,12 @@
     <div class="card-body mb-3">
         Deseja Excluir a Tarefa?
     </div>
+    @if (ViewBag.ExisteErro == true)
+    {
+        <div class="alert-danger p-3">
+            @Html.ValidationSummary(false, "Os seguintes erros foram encontrados: ", new { @class = "text-danger" })
+        </div>
+    }
     <div class="mb-3">
         @Html.LabelFor(m => m.Id, new { @class = "form-label" })
         @Html.TextBoxFor(m => m.Id, new { @class = "form-control", @readonly = true })

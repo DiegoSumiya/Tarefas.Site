@@ -7,8 +7,14 @@
 <h1>Detalhes</h1>
 <div class="card p-3">
     <div class="card-body mb-3">
-        Detalhes da Tarefa?
+        Detalhes da Tarefa
     </div>
+    @if (ViewBag.ExisteErro == true)
+    {
+        <div class="alert-danger p-3">
+            @Html.ValidationSummary(false, "Os seguintes erros foram encontrados: ", new { @class = "text-danger" })
+        </div>
+    }
     <div class="mb-3">
         @Html.LabelFor(m => m.Id, new { @class = "form-label" })
         @Html.TextBoxFor(m => m.Id, new { @class = "form-control", @readonly = true })
