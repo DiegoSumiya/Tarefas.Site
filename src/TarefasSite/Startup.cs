@@ -25,9 +25,9 @@ namespace TarefasSite
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, option =>
                 {
-                    option.LoginPath = "/User/Login";
+                    option.LoginPath = "/Home/Index";
                 });
-
+            //"/User/Login"
             services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
             services.AddScoped<ITarefaRepositorio, TarefaRepositorio>();
             services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();

@@ -118,5 +118,10 @@ namespace TarefasSite.Controllers
             }
             return View(novoUsuarioViewModel);
         }
+
+        public IActionResult Logout()
+        {
+            return RedirectToAction("Home");
+        }
     }
 }
