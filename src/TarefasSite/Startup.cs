@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Tarefas.Dominio.Repositorio;
 using Tarefas.Infra.Repositorio;
+using TarefasSite.HttpContext;
 
 namespace TarefasSite
 {
@@ -20,7 +21,7 @@ namespace TarefasSite
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
+            
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, option =>
@@ -31,6 +32,9 @@ namespace TarefasSite
             services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
             services.AddScoped<ITarefaRepositorio, TarefaRepositorio>();
             services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+            services.AddScoped<IUserContext, UserContext>();
+           
+            services.AddHttpContextAccessor();
 
             //Remover quando subir pra produção
             services.AddRazorPages().AddRazorRuntimeCompilation();

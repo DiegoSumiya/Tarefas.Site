@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using Tarefas.Dominio.Models;
 using Tarefas.Infra.Repositorio;
+using TarefasSite.HttpContext;
 using TarefasSite.ViewModels;
 
 namespace TarefasSite.Controllers
@@ -15,21 +16,22 @@ namespace TarefasSite.Controllers
     {
         private readonly ICategoriaRepositorio _categoriaRepositorio;
         private readonly ITarefaRepositorio _tarefaRepositorio;
+        private readonly IUserContext _userContext;
 
-        public TarefasController(ICategoriaRepositorio categoriaRepositorio, ITarefaRepositorio tarefaRepositorio)
+        public TarefasController(ICategoriaRepositorio categoriaRepositorio, ITarefaRepositorio tarefaRepositorio, IUserContext userContext)
         {
             _categoriaRepositorio = categoriaRepositorio;
             _tarefaRepositorio = tarefaRepositorio;
+            _userContext = userContext;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            var email = currentUser.FindFirst(c => c.Type == ClaimTypes.Email);
+            string email = _userContext.GetUserEmail();
 
             //buscar os registros da tabela de tarefas no repositorio
-            List<Tarefa> tarefas = _tarefaRepositorio.Buscar(email.Value);
+            List<Tarefa> tarefas = _tarefaRepositorio.Buscar(email);
 
             //Lista de Categorias
             List<Categoria> categorias = _categoriaRepositorio.Buscar();
@@ -82,10 +84,9 @@ namespace TarefasSite.Controllers
             if (ModelState.IsValid)
             {
                 DateTime dataHora = new DateTime(tarefaViewModel.Data.Year, tarefaViewModel.Data.Month, tarefaViewModel.Data.Day, tarefaViewModel.Hora.Hour, tarefaViewModel.Hora.Minute, 0);
-                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-                var email = currentUser.FindFirst(c => c.Type == ClaimTypes.Email);
-                
-                Tarefa tarefa = new Tarefa(dataHora, tarefaViewModel.Descricao, tarefaViewModel.Notificacao, tarefaViewModel.IdCategoria.Value, email.Value);
+                string email = _userContext.GetUserEmail();
+
+                Tarefa tarefa = new Tarefa(dataHora, tarefaViewModel.Descricao, tarefaViewModel.Notificacao, tarefaViewModel.IdCategoria.Value, email);
 
                 _tarefaRepositorio.Inserir(tarefa);
 
@@ -118,12 +119,11 @@ namespace TarefasSite.Controllers
         {
             DateTime dataHora = new DateTime(tarefaViewModel.Data.Year, tarefaViewModel.Data.Month, tarefaViewModel.Data.Day, tarefaViewModel.Hora.Hour, tarefaViewModel.Hora.Minute, 0);
 
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            var email = currentUser.FindFirst(c => c.Type == ClaimTypes.Email);
+            string email = _userContext.GetUserEmail();
 
-            Tarefa tarefa = new Tarefa(tarefaViewModel.Id, dataHora, tarefaViewModel.Descricao, tarefaViewModel.Notificacao, tarefaViewModel.IdCategoria.Value, email.Value);
+            Tarefa tarefa = new Tarefa(tarefaViewModel.Id, dataHora, tarefaViewModel.Descricao, tarefaViewModel.Notificacao, tarefaViewModel.IdCategoria.Value, email);
 
-            _tarefaRepositorio.Atualizar(tarefa, email.Value);
+            _tarefaRepositorio.Atualizar(tarefa, email);
 
             return RedirectToAction("Index");
         }
@@ -131,9 +131,8 @@ namespace TarefasSite.Controllers
         [HttpGet]
         public IActionResult Deletar(int id)
         {
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            var email = currentUser.FindFirst(c => c.Type == ClaimTypes.Email);
-            _tarefaRepositorio.Excluir(id, email.Value);
+            string email = _userContext.GetUserEmail();
+            _tarefaRepositorio.Excluir(id, email);
 
             return RedirectToAction("Index");
         }
@@ -145,12 +144,11 @@ namespace TarefasSite.Controllers
 
         private IActionResult BuscarTarefa(int id)
         {
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            var email = currentUser.FindFirst(c => c.Type == ClaimTypes.Email);
+            string email = _userContext.GetUserEmail();
 
             //buscar tarefa no repositorio
 
-            Tarefa tarefa = _tarefaRepositorio.Buscar(id, email.Value);
+            Tarefa tarefa = _tarefaRepositorio.Buscar(id, email);
 
             TarefaViewModel tarefaViewModel = new TarefaViewModel();
             tarefaViewModel.Categorias = BuscarCategorias();
