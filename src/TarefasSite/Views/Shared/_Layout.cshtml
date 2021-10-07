@@ -1,4 +1,5 @@
-﻿@using System.Security.Claims
+﻿@using TarefasSite.HttpContext
+@inject IUserContext Context
 @{
     ViewData["Title"] = "_Layout";
 }
@@ -16,16 +17,16 @@
             <li class="nav-item">
                 <a class="nav-link" href="/Tarefas">Lista de Tarefas</a>
             </li>
-            
-            
-                <li class="btn btn">
-                    <a class="nav-link" href="/User/Logout">Sair</a>
+            @if (Context.IsAuthenticated == true)
+            {
+                <li class="col-lg-12" style="text-align: right">
+                    <a class="btn btn-outline-primary" href="/User/Logout">Sair</a>
                 </li>
-            
-
+            }
         </ul>
         @RenderBody()
     </div>
 </body>
 </html>
+
 

@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace TarefasSite.HttpContext
 {
-    public class UserContext : ControllerBase, IUserContext
+    public class UserContext : IUserContext
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -23,7 +23,7 @@ namespace TarefasSite.HttpContext
 
         public bool IsAuthenticated
         {
-            get => User.Identity.IsAuthenticated;
+             get => _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
         }
     }
 }

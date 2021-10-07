@@ -119,9 +119,10 @@ namespace TarefasSite.Controllers
             return View(novoUsuarioViewModel);
         }
 
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            return RedirectToAction("Home");
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
