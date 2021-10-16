@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Tarefas.Dominio.Models
 {
@@ -24,6 +25,7 @@ namespace Tarefas.Dominio.Models
 
         }
 
+
         
 
         public int Id { get; set; }
@@ -36,6 +38,7 @@ namespace Tarefas.Dominio.Models
 
         public int IdCategoria { get; set; }
         public string EmailUsuario { get; set; }
+        public List<Usuario> Convidados { get; set; }
 
     }
 }

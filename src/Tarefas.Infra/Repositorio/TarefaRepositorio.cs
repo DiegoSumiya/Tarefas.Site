@@ -115,34 +115,22 @@ namespace Tarefas.Infra.Repositorio
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 //Criar o comando
-                SqlCommand command = new SqlCommand();
-                command.Connection = connection;
-                command.CommandText =
-                    @"INSERT INTO [dbo].[TAREFA]
-                            ([DATA]
-                            ,[DESCRICAO]
-                            ,[NOTIFICACAO]
-                            ,[IDCATEGORIA]
-                            ,[EMAIL_USUARIO])
-                        VALUES
-                            (@DATA
-                            , @DESCRICAO
-                            , @NOTIFICACAO
-                            , @IDCATEGORIA
-                            ,@EMAIL_USUARIO)";
-
+                SqlCommand command = new SqlCommand("PR_TB_TAREFA_INSERT", connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                
                 command.Parameters.AddWithValue("DATA", tarefa.Data);
                 command.Parameters.Add("DESCRICAO", System.Data.SqlDbType.VarChar);
                 command.Parameters["DESCRICAO"].Value = tarefa.Descricao;
                 command.Parameters.Add(new SqlParameter("NOTIFICACAO", tarefa.Notificacao));
                 command.Parameters.Add(new SqlParameter("IDCATEGORIA", tarefa.IdCategoria));
                 command.Parameters.Add(new SqlParameter("EMAIL_USUARIO", tarefa.EmailUsuario));
-
+               
                 //Abrir conexao
                 connection.Open();
-
                 //Executar o comando
-                command.ExecuteNonQuery();
+                int Id = Convert.ToInt32(command.ExecuteScalar());
+                
+                
             }
 
         }

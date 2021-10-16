@@ -87,7 +87,7 @@ namespace TarefasSite.Controllers
                 string email = _userContext.GetUserEmail();
 
                 Tarefa tarefa = new Tarefa(dataHora, tarefaViewModel.Descricao, tarefaViewModel.Notificacao, tarefaViewModel.IdCategoria.Value, email);
-
+                tarefa.Convidados = tarefaViewModel.Convidados;
                 _tarefaRepositorio.Inserir(tarefa);
 
                 return RedirectToAction("Inserir");

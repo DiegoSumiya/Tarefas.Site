@@ -26,5 +26,6 @@ namespace TarefasSite.ViewModels
         public int? IdCategoria { get; set; }
        
         public List<SelectListItem> Categorias { get; set; }
+        public List<Usuario> Convidados { get; set; }
     }
 }
