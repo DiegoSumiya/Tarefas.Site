@@ -26,16 +26,8 @@ namespace Tarefas.Infra.Repositorio
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 //2 EXECUTAR COMANDO (SELECT)
-                SqlCommand command = new SqlCommand();
-                command.Connection = connection;
-                command.CommandText = @"SELECT [ID]
-                      ,[DATA]
-                      ,[DESCRICAO]
-                      ,[NOTIFICACAO]
-                      ,[IDCATEGORIA]
-                      ,[EMAIL_USUARIO]
-                  FROM[dbo].[TAREFA]
-                  WHERE EMAIL_USUARIO = @email";
+                SqlCommand command = new SqlCommand("PR_TB_LISTA_TAREFA_SELECT", connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
 
                 command.Parameters.AddWithValue("email", email);
 
@@ -74,16 +66,8 @@ namespace Tarefas.Infra.Repositorio
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 //2 EXECUTAR COMANDO (SELECT)
-                SqlCommand command = new SqlCommand();
-                command.Connection = connection;
-                command.CommandText = @"SELECT [ID]
-                      ,[DATA]
-                      ,[DESCRICAO]
-                      ,[NOTIFICACAO]
-                      ,[IDCATEGORIA]
-                      ,[EMAIL_USUARIO]
-                  FROM[dbo].[TAREFA]
-                  WHERE ID = @id AND EMAIL_USUARIO = @email";
+                SqlCommand command = new SqlCommand("PR_TB_ID_TAREFA_SELECT", connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
 
                 command.Parameters.AddWithValue("id", id);
                 command.Parameters.AddWithValue("email", email);
@@ -129,6 +113,21 @@ namespace Tarefas.Infra.Repositorio
                 connection.Open();
                 //Executar o comando
                 int Id = Convert.ToInt32(command.ExecuteScalar());
+
+                if(tarefa.Convidados != null)
+                {
+                    foreach (Usuario item in tarefa.Convidados)
+                    {
+                        SqlCommand command1 = new SqlCommand("PR_TB_USUARIO_TAREFA_INSERT", connection);
+                        command1.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        command1.Parameters.AddWithValue("EMAIL_USUARIO", item.Email);
+                        command1.Parameters.AddWithValue("ID_TAREFA", Id);
+                        command1.ExecuteNonQuery();
+                    }
+                    
+
+                }
                 
                 
             }
@@ -141,15 +140,8 @@ namespace Tarefas.Infra.Repositorio
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 //Criar o comando
-                SqlCommand command = new SqlCommand();
-                command.Connection = connection;
-                command.CommandText =
-                    @"UPDATE [dbo].[TAREFA]
-                       SET [DATA] = @DATA
-                          ,[DESCRICAO] = @DESCRICAO
-                          ,[NOTIFICACAO] = @NOTIFICACAO
-                          ,[IDCATEGORIA] = @IDCATEGORIA
-                     WHERE ID = @ID AND EMAIL_USUARIO = @email";
+                SqlCommand command = new SqlCommand("PR_TB_TAREFA_UPDATE", connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
 
                 command.Parameters.AddWithValue("DATA", tarefa.Data);
                 command.Parameters.AddWithValue("email", email);
@@ -178,11 +170,8 @@ namespace Tarefas.Infra.Repositorio
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 //Criar o comando
-                SqlCommand command = new SqlCommand();
-                command.Connection = connection;
-                command.CommandText =
-                    @"DELETE FROM TAREFA
-                        WHERE ID = @ID AND EMAIL_USUARIO = @email";
+                SqlCommand command = new SqlCommand("PR_TB_TAREFA_DELETE", connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
 
                 command.Parameters.AddWithValue("ID", id);
                 command.Parameters.AddWithValue("email", email);

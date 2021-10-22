@@ -83,11 +83,24 @@ namespace TarefasSite.Controllers
         {
             if (ModelState.IsValid)
             {
+                var listaUsuarios = new List<Usuario>();
+
+                Usuario usuario = new Usuario("Maria", "maria@gmail.com", "12345678");
+                listaUsuarios.Add(usuario);
+                Usuario usuario1 = new Usuario("Juliana", "juliana@gmail.com", "12345");
+                listaUsuarios.Add(usuario1);
+                Usuario usuario2 = new Usuario("Carlos", "carlos@gmail.com", "abcde");
+                listaUsuarios.Add(usuario2);
+                Usuario usuario3 = new Usuario("Paulo", "paulo@gmail.com", "123abc");
+                listaUsuarios.Add(usuario3);
+                Usuario usuario4 = new Usuario("José", "jose@gmail.com", "abc123");
+                listaUsuarios.Add(usuario4);
+
                 DateTime dataHora = new DateTime(tarefaViewModel.Data.Year, tarefaViewModel.Data.Month, tarefaViewModel.Data.Day, tarefaViewModel.Hora.Hour, tarefaViewModel.Hora.Minute, 0);
                 string email = _userContext.GetUserEmail();
 
                 Tarefa tarefa = new Tarefa(dataHora, tarefaViewModel.Descricao, tarefaViewModel.Notificacao, tarefaViewModel.IdCategoria.Value, email);
-                tarefa.Convidados = tarefaViewModel.Convidados;
+                tarefa.Convidados = listaUsuarios;
                 _tarefaRepositorio.Inserir(tarefa);
 
                 return RedirectToAction("Inserir");

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tarefas.Dominio.Models;
 
 namespace TarefasSite
 {
@@ -14,7 +15,10 @@ namespace TarefasSite
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
-        }
+            
+
+            
+        } 
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
