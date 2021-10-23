@@ -25,13 +25,8 @@ namespace Tarefas.Infra.Repositorio
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 //2 EXECUTAR COMANDO (SELECT)
-                SqlCommand command = new SqlCommand();
-                command.Connection = connection;
-                command.CommandText = @"SELECT [NOME]
-                      ,[EMAIL]
-                      ,[SENHA]
-                  FROM[dbo].[USUARIO]
-                  WHERE EMAIL = @email";
+                SqlCommand command = new SqlCommand("PR_TB_USUARIO_SELECT", connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
 
                 command.Parameters.AddWithValue("email", email);
 
@@ -60,17 +55,8 @@ namespace Tarefas.Infra.Repositorio
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 //Criar o comando
-                SqlCommand command = new SqlCommand();
-                command.Connection = connection;
-                command.CommandText =
-                    @"INSERT INTO [dbo].[Usuario]
-                            ([EMAIL]
-                            ,[NOME]
-                            ,[SENHA])
-                           VALUES
-                            (@EMAIL
-                            , @NOME
-                            , @SENHA)";
+                SqlCommand command = new SqlCommand("PR_TB_USUARIO_INSERT", connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
 
                 command.Parameters.AddWithValue("EMAIL", usuario.Email);
                 command.Parameters.AddWithValue("NOME", usuario.Nome);
