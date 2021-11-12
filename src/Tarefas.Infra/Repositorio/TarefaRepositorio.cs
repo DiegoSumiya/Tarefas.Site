@@ -66,7 +66,7 @@ namespace Tarefas.Infra.Repositorio
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 //2 EXECUTAR COMANDO (SELECT)
-                SqlCommand command = new SqlCommand("PR_TB_ID_TAREFA_SELECT", connection);
+                SqlCommand command = new SqlCommand("PR_TB_TAREFA_ID_SELECT", connection);
                 command.CommandType = System.Data.CommandType.StoredProcedure;
 
                 command.Parameters.AddWithValue("id", id);

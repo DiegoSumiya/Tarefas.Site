@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using Tarefas.Dominio.Models;
 using Tarefas.Dominio.Repositorio;
@@ -69,8 +70,40 @@ namespace Tarefas.Infra.Repositorio
                 command.ExecuteNonQuery();
             }
 
+        }
 
-        
-        }   
+        public List<Usuario> Buscar()
+        {
+            //buscar os registros da tabela de Usuario
+            //1 Conectar no banco
+            List<Usuario> usuarios = new List<Usuario>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                //2 EXECUTAR COMANDO (SELECT)
+                SqlCommand command = new SqlCommand("PR_TB_USUARIO_LISTA_SELECT", connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                //3 LER INFORMACOES E ENVIAR PRA TELA
+                while (reader.Read())
+                {
+
+                   
+                    string email = reader["EMAIL"].ToString();
+                    
+                    Usuario item = new Usuario(email);
+
+                    usuarios.Add(item);
+                }
+
+                connection.Close();
+            }
+
+            return usuarios;
+
+        }
     }
 }

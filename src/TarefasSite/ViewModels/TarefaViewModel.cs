@@ -24,8 +24,10 @@ namespace TarefasSite.ViewModels
 
         [Required(ErrorMessage = "Categoria é obrigatório")]
         public int? IdCategoria { get; set; }
-       
+
+        public List<string> EmailConvidado { get; set; }
+
         public List<SelectListItem> Categorias { get; set; }
-        public List<Usuario> Convidados { get; set; }
+        public MultiSelectList Convidados { get; set; }
     }
 }

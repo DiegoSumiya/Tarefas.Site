@@ -13,6 +13,10 @@
             Senha = senha;
         }
 
-        
+        public Usuario(string email)
+        {
+           
+            Email = email;
+        }
     }
 }

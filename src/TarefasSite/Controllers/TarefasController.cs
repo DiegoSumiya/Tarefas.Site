@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using Tarefas.Dominio.Models;
+using Tarefas.Dominio.Repositorio;
 using Tarefas.Infra.Repositorio;
 using TarefasSite.HttpContext;
 using TarefasSite.ViewModels;
@@ -16,12 +17,14 @@ namespace TarefasSite.Controllers
     {
         private readonly ICategoriaRepositorio _categoriaRepositorio;
         private readonly ITarefaRepositorio _tarefaRepositorio;
+        private readonly IUsuarioRepositorio _usuarioRepositorio;
         private readonly IUserContext _userContext;
 
-        public TarefasController(ICategoriaRepositorio categoriaRepositorio, ITarefaRepositorio tarefaRepositorio, IUserContext userContext)
+        public TarefasController(ICategoriaRepositorio categoriaRepositorio, ITarefaRepositorio tarefaRepositorio,IUsuarioRepositorio usuarioRepositorio, IUserContext userContext)
         {
             _categoriaRepositorio = categoriaRepositorio;
             _tarefaRepositorio = tarefaRepositorio;
+            _usuarioRepositorio = usuarioRepositorio;
             _userContext = userContext;
         }
 
@@ -74,7 +77,8 @@ namespace TarefasSite.Controllers
             tarefa.Hora = DateTime.Now;
 
             tarefa.Categorias = BuscarCategorias();
-
+            tarefa.Convidados = BuscarConvidados();
+           
             return View(tarefa);
         }
 
@@ -83,24 +87,13 @@ namespace TarefasSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                var listaUsuarios = new List<Usuario>();
-
-                Usuario usuario = new Usuario("Maria", "maria@gmail.com", "12345678");
-                listaUsuarios.Add(usuario);
-                Usuario usuario1 = new Usuario("Juliana", "juliana@gmail.com", "12345");
-                listaUsuarios.Add(usuario1);
-                Usuario usuario2 = new Usuario("Carlos", "carlos@gmail.com", "abcde");
-                listaUsuarios.Add(usuario2);
-                Usuario usuario3 = new Usuario("Paulo", "paulo@gmail.com", "123abc");
-                listaUsuarios.Add(usuario3);
-                Usuario usuario4 = new Usuario("José", "jose@gmail.com", "abc123");
-                listaUsuarios.Add(usuario4);
-
+                
+                
                 DateTime dataHora = new DateTime(tarefaViewModel.Data.Year, tarefaViewModel.Data.Month, tarefaViewModel.Data.Day, tarefaViewModel.Hora.Hour, tarefaViewModel.Hora.Minute, 0);
                 string email = _userContext.GetUserEmail();
-
+                
                 Tarefa tarefa = new Tarefa(dataHora, tarefaViewModel.Descricao, tarefaViewModel.Notificacao, tarefaViewModel.IdCategoria.Value, email);
-                tarefa.Convidados = listaUsuarios;
+                
                 _tarefaRepositorio.Inserir(tarefa);
 
                 return RedirectToAction("Inserir");
@@ -201,6 +194,17 @@ namespace TarefasSite.Controllers
 
                 listItems.Add(item);
             }
+
+            return listItems;
+        }
+
+       
+
+        private MultiSelectList BuscarConvidados()
+        {
+            List<Usuario> convidados = _usuarioRepositorio.Buscar();
+
+            MultiSelectList listItems = new MultiSelectList(convidados, "Email", "Email");
 
             return listItems;
         }
