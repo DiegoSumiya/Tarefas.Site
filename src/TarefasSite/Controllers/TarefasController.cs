@@ -93,6 +93,7 @@ namespace TarefasSite.Controllers
                 string email = _userContext.GetUserEmail();
                 
                 Tarefa tarefa = new Tarefa(dataHora, tarefaViewModel.Descricao, tarefaViewModel.Notificacao, tarefaViewModel.IdCategoria.Value, email);
+                tarefa.Convidados = tarefaViewModel.EmailConvidado;
                 
                 _tarefaRepositorio.Inserir(tarefa);
 
@@ -128,7 +129,7 @@ namespace TarefasSite.Controllers
             string email = _userContext.GetUserEmail();
 
             Tarefa tarefa = new Tarefa(tarefaViewModel.Id, dataHora, tarefaViewModel.Descricao, tarefaViewModel.Notificacao, tarefaViewModel.IdCategoria.Value, email);
-
+            tarefa.Convidados = tarefaViewModel.EmailConvidado;
             _tarefaRepositorio.Atualizar(tarefa, email);
 
             return RedirectToAction("Index");
@@ -158,6 +159,7 @@ namespace TarefasSite.Controllers
 
             TarefaViewModel tarefaViewModel = new TarefaViewModel();
             tarefaViewModel.Categorias = BuscarCategorias();
+            tarefaViewModel.Convidados = BuscarConvidados();
 
             if (tarefa == null)
             {
@@ -173,6 +175,7 @@ namespace TarefasSite.Controllers
             tarefaViewModel.Hora = tarefa.Data;
             tarefaViewModel.Notificacao = tarefa.Notificacao;
             tarefaViewModel.IdCategoria = tarefa.IdCategoria;
+            tarefaViewModel.EmailConvidado = tarefa.Convidados;
 
             //Carregar lista de Categorias
             tarefaViewModel.Categorias = BuscarCategorias();

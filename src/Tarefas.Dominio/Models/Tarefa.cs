@@ -38,7 +38,7 @@ namespace Tarefas.Dominio.Models
 
         public int IdCategoria { get; set; }
         public string EmailUsuario { get; set; }
-        public List<Usuario> Convidados { get; set; }
+        public List<string> Convidados { get; set; }
 
         
         

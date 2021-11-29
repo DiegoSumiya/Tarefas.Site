@@ -40,6 +40,12 @@
         @Html.LabelFor(m => m.Notificacao, new { @class = "form-check-label" })
     </div>
 
+    <div class="mb-3">
+        @Html.Label("EmailConvidado", "Convidados", new { @class = "form-label" })
+        @Html.DropDownListFor(m => m.EmailConvidado, Model.Convidados, new { @multiple = "multiple", @class = "form-select", disabled = true })
+
+    </div>
+
     <div>
         @Html.ActionLink("Voltar", "Index", "Tarefas", null, new { @class = "btn btn-secondary" })
     </div>

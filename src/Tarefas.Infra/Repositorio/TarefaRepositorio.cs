@@ -86,6 +86,22 @@ namespace Tarefas.Infra.Repositorio
 
                     tarefa = new Tarefa(id, data, descricao, notificacao, idCategoria, emailUsuario);
                 }
+                connection.Close();
+
+
+                SqlCommand command1 = new SqlCommand("PR_TB_CONVIDADO_ID_SELECT", connection);
+                command1.CommandType = System.Data.CommandType.StoredProcedure;
+
+                command1.Parameters.AddWithValue("id", id);
+                connection.Open();
+                SqlDataReader reader1 = command1.ExecuteReader();
+
+                while(reader1.Read())
+                {
+                    string convidados = reader1["EMAIL_CONVIDADO"].ToString();
+                    tarefa.Convidados = new List<string>();
+                    tarefa.Convidados.Add(convidados);
+                }
 
                 connection.Close();
             }
@@ -116,12 +132,12 @@ namespace Tarefas.Infra.Repositorio
 
                 if(tarefa.Convidados != null)
                 {
-                    foreach (Usuario item in tarefa.Convidados)
+                    foreach (var item in tarefa.Convidados)
                     {
-                        SqlCommand command1 = new SqlCommand("PR_TB_USUARIO_TAREFA_INSERT", connection);
+                        SqlCommand command1 = new SqlCommand("PR_TB_CONVIDADO_TAREFA_INSERT", connection);
                         command1.CommandType = System.Data.CommandType.StoredProcedure;
 
-                        command1.Parameters.AddWithValue("EMAIL_USUARIO", item.Email);
+                        command1.Parameters.AddWithValue("EMAIL_CONVIDADO", item);
                         command1.Parameters.AddWithValue("ID_TAREFA", Id);
                         command1.ExecuteNonQuery();
                     }
@@ -158,9 +174,30 @@ namespace Tarefas.Infra.Repositorio
 
                 //Abrir conexao
                 connection.Open();
-
                 //Executar o comando
                 command.ExecuteNonQuery();
+                if (tarefa.Convidados != null)
+                {
+                    SqlCommand command2 = new SqlCommand("PR_TB_CONVIDADO_DELETE", connection);
+                    command2.CommandType = System.Data.CommandType.StoredProcedure;
+                    
+                    command2.Parameters.AddWithValue("ID", tarefa.Id);
+                    command2.ExecuteNonQuery();
+
+                    foreach (var item in tarefa.Convidados)
+                    {
+                        SqlCommand command3 = new SqlCommand("PR_TB_CONVIDADO_TAREFA_INSERT", connection);
+                        command3.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        command3.Parameters.AddWithValue("EMAIL_CONVIDADO", item);
+                        command3.Parameters.AddWithValue("ID_TAREFA", tarefa.Id);
+                        command3.ExecuteNonQuery();
+                    }
+
+
+                }
+
+                
             }
         }
 

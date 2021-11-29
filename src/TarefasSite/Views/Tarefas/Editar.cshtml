@@ -54,6 +54,12 @@
             @Html.LabelFor(m => m.Notificacao, new { @class = "form-check-label" })
         </div>
 
+        <div class="mb-3">
+            @Html.Label("EmailConvidado", "Selecione os convidados", new { @class = "form-label" })
+            @Html.DropDownListFor(m => m.EmailConvidado, Model.Convidados, new { @multiple = "multiple", @class = "form-select" })
+
+        </div>
+
         <div>
             <button class="btn btn-primary" type="submit">Atualizar</button>
             @Html.ActionLink("Cancelar", "Index", "Tarefas", null, new { @class = "btn btn-secondary" })
