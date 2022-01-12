@@ -1,0 +1,8 @@
+﻿@model TarefasSite.ViewModels.ErrorViewModel
+@{ 
+    ViewData["Title"] = "Error occurred: ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-danger">@ViewData["Title"]</h2>
+<h2 class="text-danger">@Model.Message</h2>

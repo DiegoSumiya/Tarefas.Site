@@ -1,15 +1,6 @@
 ﻿namespace Tarefas.Dominio.Models
 {
-    //public enum Categoria : byte
-    //{
-    //    //1	Pessoal
-    //    //2	Trabalho
-    //    //3	Outros
-
-    //    Pessoal = 1,
-    //    Trabalho,
-    //    Outros
-    //}
+    
 
     public class Categoria
     {
